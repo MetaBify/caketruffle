@@ -75,6 +75,13 @@ export default async function RootLayout({
       data-lang={lang}
       className={`${displayLatin.variable} ${bodyLatin.variable} ${displayCyrillic.variable} ${bodyCyrillic.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5356953527878151"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">{children}</main>
