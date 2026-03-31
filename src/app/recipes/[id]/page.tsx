@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { getMealById } from "@/lib/recipes";
 import { normalizeLang, t } from "@/lib/i18n";
+import AdSlot from "@/components/AdSlot";
 
 const EMOJI_STEPS = [
   "\u{1F944}",
@@ -82,7 +83,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
-      <div className="grid gap-8">
+      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="rounded-[32px] border border-white/70 bg-white/80 p-8 shadow-[var(--shadow)]">
           <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
             {recipe.category ?? "Recipe"}{" "}
@@ -170,6 +171,11 @@ export default async function RecipePage({ params }: RecipePageProps) {
             </p>
           ) : null}
         </section>
+
+        <aside className="space-y-4">
+          <AdSlot label="Ad Slot - Tall" className="min-h-[280px]" />
+          <AdSlot label="Ad Slot - Tall" className="min-h-[280px]" />
+        </aside>
 
       </div>
       <script

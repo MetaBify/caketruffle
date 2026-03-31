@@ -19,6 +19,7 @@ import {
   recordSuccessfulLogin,
   storeSession,
 } from "@/lib/admin";
+import AdSlot from "@/components/AdSlot";
 import { normalizeLang, t } from "@/lib/i18n";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import ImageUploadPreview from "@/components/ImageUploadPreview";
@@ -303,6 +304,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </div>
 
         <div className="space-y-4">
+          <AdSlot label="Ad Slot - Admin" className="min-h-[200px]" />
           <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
             <h2 className="text-lg font-semibold">{t(lang, "shortLinks")}</h2>
             <div className="mt-4 space-y-3 text-sm">

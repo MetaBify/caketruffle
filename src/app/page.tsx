@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { normalizeLang, t } from "@/lib/i18n";
 import { getRandomMeals } from "@/lib/recipes";
 import RecipeCard from "@/components/RecipeCard";
+import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
 
 export default async function Home() {
@@ -51,6 +52,7 @@ export default async function Home() {
               Warm spices, mellow sauces, and a quiet finish.
             </p>
           </div>
+          <AdSlot label="Ad Slot - Hero" />
         </div>
       </section>
 
@@ -69,6 +71,10 @@ export default async function Home() {
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
+      </section>
+
+      <section className="mt-12">
+        <AdSlot label="Ad Slot - Wide" />
       </section>
 
     </div>

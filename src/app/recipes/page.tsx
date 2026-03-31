@@ -8,6 +8,7 @@ import {
   searchMeals,
 } from "@/lib/recipes";
 import RecipeCard from "@/components/RecipeCard";
+import AdSlot from "@/components/AdSlot";
 import RecipeGridClient from "@/components/RecipeGridClient";
 
 type RecipesPageProps = {
@@ -101,6 +102,11 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         ) : (
           <RecipeGridClient initial={uniqueRecipes} />
         )}
+      </div>
+
+      <div className="mt-10 grid gap-6 md:grid-cols-[2fr_1fr]">
+        <AdSlot label="Ad Slot - Wide" />
+        <AdSlot label="Ad Slot - Tall" className="min-h-[240px]" />
       </div>
 
     </div>

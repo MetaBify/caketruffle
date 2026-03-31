@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
+import AdSlot from "@/components/AdSlot";
 import { type Lang, t } from "@/lib/i18n";
 
 type Offer = {
@@ -120,6 +121,11 @@ export default function OfferWall({
             {t(lang, "waitToContinue")} {t(lang, "orComplete")}
           </p>
 
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <AdSlot label="Ad Slot - Wide" />
+            <AdSlot label="Ad Slot - Wide" />
+          </div>
+
           <div className="mt-8">
             <button
               type="button"
@@ -215,6 +221,7 @@ export default function OfferWall({
               )}
             </div>
           </div>
+          <AdSlot label="Ad Slot - Tall" className="min-h-[220px]" />
         </aside>
       </div>
     </div>
