@@ -1,16 +1,49 @@
+"use client";
+
+import { useEffect } from "react";
+
 type AdSlotProps = {
-  label: string;
+  label?: string;
   className?: string;
+  slot?: string;
+  format?: "auto" | "rectangle" | "vertical" | "horizontal";
+  fullWidthResponsive?: boolean;
 };
 
-export default function AdSlot({ label, className }: AdSlotProps) {
+const AD_CLIENT = "ca-pub-5356953527878151";
+const DEFAULT_SLOT = "9513932121";
+
+export default function AdSlot({
+  className,
+  slot = DEFAULT_SLOT,
+  format = "auto",
+  fullWidthResponsive = true,
+}: AdSlotProps) {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const adsbygoogle = (window as any).adsbygoogle || [];
+      adsbygoogle.push({});
+      (window as any).adsbygoogle = adsbygoogle;
+    } catch {
+      // ignore adsbygoogle errors in dev/test
+    }
+  }, []);
+
   return (
     <div
-      className={`flex min-h-[120px] w-full items-center justify-center rounded-lg border border-dashed border-black/15 bg-white/70 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--muted)] shadow-sm ${
+      className={`min-h-[120px] w-full rounded-lg border border-black/10 bg-white/70 shadow-sm ${
         className ?? ""
       }`}
     >
-      {label}
+      <ins
+        className="adsbygoogle block"
+        style={{ display: "block" }}
+        data-ad-client={AD_CLIENT}
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive={fullWidthResponsive ? "true" : "false"}
+      />
     </div>
   );
 }
