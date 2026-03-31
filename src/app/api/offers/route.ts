@@ -60,7 +60,7 @@ function parseMaybeJson(text: string) {
   if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
     return JSON.parse(trimmed);
   }
-  const match = trimmed.match(/^[^(]*\\((.*)\\)\\s*;?$/s);
+  const match = trimmed.match(/^[^(]*\\(([\\s\\S]*)\\)\\s*;?$/);
   if (!match) {
     throw new Error("Unexpected offer response");
   }

@@ -62,3 +62,4 @@ t.env
 # local env
 .env
 .env.local
+.vercel

@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool, type QueryResult, type QueryResultRow } from "pg";
 
 declare global {
   var __neonPool: Pool | undefined;
@@ -75,10 +75,10 @@ if (!globalThis.__neonInit) {
   globalThis.__neonInit = initPromise;
 }
 
-export async function query<T = unknown>(
+export async function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
   params?: (string | number | boolean | null)[]
-) {
+) : Promise<QueryResult<T>> {
   await initPromise;
   return pool.query<T>(text, params);
 }
