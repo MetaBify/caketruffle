@@ -11,19 +11,23 @@ export default async function Home() {
   const featured = await getRandomMeals(6);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-12">
-      <section className="grid gap-10 rounded-[36px] border border-white/70 bg-white/70 p-10 shadow-[var(--shadow)] md:grid-cols-[1.1fr_0.9fr]">
+    <div className="mx-auto w-full max-w-6xl px-6 py-10 sm:py-12">
+      <section className="grid gap-10 rounded-[36px] border border-white/70 bg-white/70 p-6 shadow-[var(--shadow)] sm:p-8 md:grid-cols-[1.1fr_0.9fr] md:p-10">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
             Caketruffle recipes
           </p>
-          <h1 className="mt-4 text-4xl font-semibold md:text-5xl">
+          <h1 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
             {t(lang, "heroTitle")}
           </h1>
           <p className="mt-4 text-base text-[color:var(--muted)]">
             {t(lang, "heroSubtitle")}
           </p>
-          <form action="/recipes" method="get" className="mt-6 flex gap-3">
+          <form
+            action="/recipes"
+            method="get"
+            className="mt-6 flex flex-col gap-3 sm:flex-row"
+          >
             <input
               name="q"
               placeholder={t(lang, "searchPlaceholder")}
@@ -31,16 +35,12 @@ export default async function Home() {
             />
             <button
               type="submit"
-              className="rounded-full bg-[color:var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[color:var(--accent-3)]"
+              className="w-full rounded-full bg-[color:var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[color:var(--accent-3)] sm:w-auto"
             >
               Search
             </button>
           </form>
-          <div className="mt-6 flex flex-wrap gap-4 text-xs text-[color:var(--muted)]">
-            <span>Emoji steps</span>
-            <span>Precise ingredients</span>
-            <span>Language modes</span>
-          </div>
+          <div className="mt-6" />
         </div>
         <div className="space-y-4">
           <div className="rounded-3xl bg-[color:var(--surface-2)] p-6 shadow-sm">

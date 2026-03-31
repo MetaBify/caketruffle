@@ -150,7 +150,7 @@ export default function OfferWall({
                   window.open(data.url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-sm transition ${
+              className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-sm transition sm:w-auto ${
                 canContinue
                   ? "bg-[color:var(--accent)] text-white hover:bg-[color:var(--accent-3)]"
                   : "cursor-not-allowed bg-[color:var(--surface-2)] text-[color:var(--muted)]"

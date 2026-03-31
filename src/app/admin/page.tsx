@@ -169,14 +169,14 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-semibold">{t(lang, "adminTitle")}</h1>
           <p className="mt-2 text-sm text-[color:var(--muted)]">
             Create, edit, and monitor short links with offer gates.
           </p>
         </div>
-        <form action={logoutAction}>
+        <form action={logoutAction} className="self-start sm:self-auto">
           <button
             type="submit"
             className="rounded-full border border-black/10 bg-white px-5 py-2 text-sm font-semibold text-[color:var(--muted)] shadow-sm transition hover:text-[color:var(--accent-3)]"
@@ -221,7 +221,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm shadow-sm outline-none focus:border-[color:var(--ring)]"
               required
             />
-            <label className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-black/15 bg-white/80 px-4 py-6 text-sm text-[color:var(--muted)] shadow-sm">
+            <label className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-black/15 bg-white/80 px-4 py-6 text-center text-sm text-[color:var(--muted)] shadow-sm">
               <span className="font-semibold text-[color:var(--ink)]">
                 Drag & drop an image here
               </span>
