@@ -15,7 +15,7 @@ export default async function Home() {
       <section className="grid gap-10 rounded-[36px] border border-white/70 bg-white/70 p-10 shadow-[var(--shadow)] md:grid-cols-[1.1fr_0.9fr]">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
-            Soft recipe studio
+            Caketruffle recipes
           </p>
           <h1 className="mt-4 text-4xl font-semibold md:text-5xl">
             {t(lang, "heroTitle")}
@@ -39,7 +39,7 @@ export default async function Home() {
           <div className="mt-6 flex flex-wrap gap-4 text-xs text-[color:var(--muted)]">
             <span>Emoji steps</span>
             <span>Precise ingredients</span>
-            <span>Soft language modes</span>
+            <span>Language modes</span>
           </div>
         </div>
         <div className="space-y-4">

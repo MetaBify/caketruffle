@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { type Lang, t } from "@/lib/i18n";
+import CakeMark from "@/components/CakeMark";
 
 type SiteHeaderProps = {
   lang: Lang;
@@ -12,14 +13,14 @@ export default function SiteHeader({ lang }: SiteHeaderProps) {
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[color:var(--accent)] text-lg font-semibold text-white shadow-md">
-            S
+            <CakeMark />
           </div>
           <div>
             <p className="font-[family-name:var(--font-serif)] text-lg font-semibold">
-              Savorlane
+              Caketruffle
             </p>
             <p className="text-xs text-[color:var(--muted)]">
-              soft recipe atlas
+              recipe index
             </p>
           </div>
         </Link>

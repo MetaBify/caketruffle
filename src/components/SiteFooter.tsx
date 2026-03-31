@@ -11,9 +11,9 @@ export default function SiteFooter({ lang }: SiteFooterProps) {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-6 text-xs text-[color:var(--muted)] md:flex-row md:items-center md:justify-between">
         <div>
           <p className="font-[family-name:var(--font-serif)] text-sm text-[color:var(--ink)]">
-            Savorlane
+            Caketruffle
           </p>
-          <p>Soft recipes. Gentle steps. Cozy destinations.</p>
+          <p>Clear recipes. Easy steps. Real measurements.</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <span>Language: {lang.toUpperCase()}</span>

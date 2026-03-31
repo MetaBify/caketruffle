@@ -30,9 +30,36 @@ const bodyCyrillic = Noto_Sans({
   weight: ["300", "400", "500", "700"],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://caketruffle.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Savorlane",
-  description: "Soft, modern recipes with a curated link vault.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Caketruffle",
+    template: "%s | Caketruffle",
+  },
+  description: "Clear recipes, real measurements, and easy steps.",
+  applicationName: "Caketruffle",
+  keywords: [
+    "recipes",
+    "cooking",
+    "ingredients",
+    "step by step",
+    "food",
+    "meals",
+  ],
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    title: "Caketruffle",
+    description: "Clear recipes, real measurements, and easy steps.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Caketruffle",
+    description: "Clear recipes, real measurements, and easy steps.",
+  },
 };
 
 export default async function RootLayout({
