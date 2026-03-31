@@ -106,7 +106,13 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
       <div className="mt-10 grid gap-6 md:grid-cols-[2fr_1fr]">
         <AdSlot label="Ad Slot - Wide" />
-        <AdSlot label="Ad Slot - Tall" className="min-h-[240px]" />
+        <AdSlot
+          label="Ad Slot - Tall"
+          className="min-h-[240px]"
+          slot="3471267956"
+          format="fluid"
+          layoutKey="-fb+5w+4e-db+86"
+        />
       </div>
 
     </div>

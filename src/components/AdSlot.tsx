@@ -6,7 +6,8 @@ type AdSlotProps = {
   label?: string;
   className?: string;
   slot?: string;
-  format?: "auto" | "rectangle" | "vertical" | "horizontal";
+  format?: "auto" | "fluid" | "rectangle" | "vertical" | "horizontal";
+  layoutKey?: string;
   fullWidthResponsive?: boolean;
 };
 
@@ -17,6 +18,7 @@ export default function AdSlot({
   className,
   slot = DEFAULT_SLOT,
   format = "auto",
+  layoutKey,
   fullWidthResponsive = true,
 }: AdSlotProps) {
   useEffect(() => {
@@ -42,6 +44,7 @@ export default function AdSlot({
         data-ad-client={AD_CLIENT}
         data-ad-slot={slot}
         data-ad-format={format}
+        data-ad-layout-key={layoutKey}
         data-full-width-responsive={fullWidthResponsive ? "true" : "false"}
       />
     </div>

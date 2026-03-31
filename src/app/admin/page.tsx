@@ -304,7 +304,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </div>
 
         <div className="space-y-4">
-          <AdSlot label="Ad Slot - Admin" className="min-h-[200px]" />
+          <AdSlot
+            label="Ad Slot - Admin"
+            className="min-h-[200px]"
+            slot="3471267956"
+            format="fluid"
+            layoutKey="-fb+5w+4e-db+86"
+          />
           <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
             <h2 className="text-lg font-semibold">{t(lang, "shortLinks")}</h2>
             <div className="mt-4 space-y-3 text-sm">

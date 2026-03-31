@@ -221,7 +221,13 @@ export default function OfferWall({
               )}
             </div>
           </div>
-          <AdSlot label="Ad Slot - Tall" className="min-h-[220px]" />
+          <AdSlot
+            label="Ad Slot - Tall"
+            className="min-h-[220px]"
+            slot="3471267956"
+            format="fluid"
+            layoutKey="-fb+5w+4e-db+86"
+          />
         </aside>
       </div>
     </div>
