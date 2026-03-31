@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { normalizeLang, t } from "@/lib/i18n";
 import {
@@ -11,6 +12,23 @@ import RecipeGridClient from "@/components/RecipeGridClient";
 
 type RecipesPageProps = {
   searchParams?: Promise<{ q?: string; category?: string; page?: string }>;
+};
+
+export const metadata: Metadata = {
+  title: "Recipes",
+  description: "Browse curated recipes with clear ingredients and steps.",
+  alternates: {
+    canonical: "/recipes",
+  },
+  openGraph: {
+    title: "Recipes",
+    description: "Browse curated recipes with clear ingredients and steps.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Recipes",
+    description: "Browse curated recipes with clear ingredients and steps.",
+  },
 };
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {

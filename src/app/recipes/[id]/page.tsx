@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { getMealById } from "@/lib/recipes";
@@ -18,12 +19,66 @@ type RecipePageProps = {
   params: Promise<{ id: string }>;
 };
 
+export async function generateMetadata({
+  params,
+}: RecipePageProps): Promise<Metadata> {
+  const resolvedParams = await Promise.resolve(params);
+  const recipe = await getMealById(resolvedParams.id);
+  if (!recipe) {
+    return { title: "Recipe" };
+  }
+
+  const description = (recipe.instructions ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+
+  return {
+    title: recipe.title,
+    description: description || "Step-by-step recipe with clear ingredients.",
+    alternates: {
+      canonical: `/recipes/${recipe.id}`,
+    },
+    openGraph: {
+      title: recipe.title,
+      description: description || "Step-by-step recipe with clear ingredients.",
+      images: recipe.image ? [recipe.image] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: recipe.title,
+      description: description || "Step-by-step recipe with clear ingredients.",
+      images: recipe.image ? [recipe.image] : undefined,
+    },
+  };
+}
+
 export default async function RecipePage({ params }: RecipePageProps) {
   const cookieStore = await cookies();
   const lang = normalizeLang(cookieStore.get("lang")?.value);
   const resolvedParams = await Promise.resolve(params);
   const recipe = await getMealById(resolvedParams.id);
   if (!recipe) return notFound();
+  const description = (recipe.instructions ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 200);
+  const recipeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.title,
+    image: recipe.image ? [recipe.image] : undefined,
+    description: description || undefined,
+    recipeCategory: recipe.category ?? undefined,
+    recipeCuisine: recipe.area ?? undefined,
+    recipeIngredient: recipe.ingredients.map((item) =>
+      item.measure ? `${item.measure} ${item.name}` : item.name
+    ),
+    recipeInstructions: recipe.steps.map((step) => ({
+      "@type": "HowToStep",
+      text: step,
+    })),
+  };
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -117,6 +172,11 @@ export default async function RecipePage({ params }: RecipePageProps) {
         </section>
 
       </div>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
+      />
     </div>
   );
 }
