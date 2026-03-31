@@ -13,6 +13,8 @@ export type Meal = {
   [key: string]: string | undefined;
 };
 
+export type StepSectionKey = "prepare" | "cook" | "serve" | "steps";
+
 export type Recipe = {
   id: string;
   title: string;
@@ -24,6 +26,7 @@ export type Recipe = {
   youtube?: string;
   ingredients: { name: string; measure: string }[];
   steps: string[];
+  stepSections: { key: StepSectionKey; steps: string[] }[];
 };
 
 export type Category = {
@@ -76,6 +79,7 @@ export async function filterByCategory(category: string): Promise<Recipe[]> {
     image: meal.strMealThumb,
     ingredients: [],
     steps: [],
+    stepSections: [],
   }));
 }
 
@@ -115,6 +119,7 @@ function toRecipe(meal: Meal): Recipe {
   const ingredients = extractIngredients(meal);
   const instructions = meal.strInstructions ?? "";
   const steps = parseSteps(instructions);
+  const stepSections = buildStepSections(steps);
 
   return {
     id: meal.idMeal,
@@ -127,6 +132,7 @@ function toRecipe(meal: Meal): Recipe {
     youtube: meal.strYoutube,
     ingredients,
     steps,
+    stepSections,
   };
 }
 
@@ -136,13 +142,74 @@ function extractIngredients(meal: Meal): { name: string; measure: string }[] {
     const ingredient = meal[`strIngredient${i}`];
     const measure = meal[`strMeasure${i}`];
     if (ingredient && ingredient.trim()) {
+      const normalized = normalizeIngredient(ingredient.trim(), measure);
       items.push({
-        name: ingredient.trim(),
-        measure: measure?.trim() || "",
+        name: normalized.name,
+        measure: normalized.measure,
       });
     }
   }
   return items;
+}
+
+const UNIT_WORDS = new Set([
+  "tsp",
+  "tbsp",
+  "tbs",
+  "tablespoon",
+  "tablespoons",
+  "teaspoon",
+  "teaspoons",
+  "cup",
+  "cups",
+  "ml",
+  "l",
+  "g",
+  "kg",
+  "oz",
+  "lb",
+  "lbs",
+  "pinch",
+  "dash",
+  "clove",
+  "cloves",
+  "slice",
+  "slices",
+  "can",
+  "cans",
+  "packet",
+  "packets",
+  "piece",
+  "pieces",
+  "handful",
+]);
+
+function normalizeIngredient(ingredient: string, measure?: string) {
+  const rawMeasure = (measure ?? "").trim();
+  if (!rawMeasure) {
+    return { name: ingredient, measure: "" };
+  }
+
+  const tokens = rawMeasure.split(/\s+/);
+  let name = ingredient;
+  let cleanedMeasure = rawMeasure;
+
+  if (tokens.length > 1 && /[0-9]/.test(tokens[0])) {
+    const rest = tokens.slice(1);
+    const restIsUnits = rest.every((token) =>
+      UNIT_WORDS.has(token.toLowerCase())
+    );
+    if (!restIsUnits) {
+      name = `${rest.join(" ")} ${ingredient}`.trim();
+      cleanedMeasure = tokens[0];
+    }
+  }
+
+  if (/^\\d{2}$/.test(cleanedMeasure) && /egg/i.test(ingredient)) {
+    cleanedMeasure = `${cleanedMeasure[0]}-${cleanedMeasure[1]}`;
+  }
+
+  return { name, measure: cleanedMeasure };
 }
 
 function parseSteps(instructions: string): string[] {
@@ -152,11 +219,107 @@ function parseSteps(instructions: string): string[] {
     .split(/\r?\n+/)
     .map((line) => line.trim())
     .filter(Boolean);
-  if (byLine.length > 1) {
-    return byLine;
+  const base = byLine.length > 1 ? byLine : [cleaned];
+
+  return base
+    .flatMap(splitNumberedSteps)
+    .flatMap(splitSentences)
+    .flatMap(splitLongStep)
+    .map(cleanStep)
+    .filter(Boolean);
+}
+
+function splitNumberedSteps(text: string): string[] {
+  if (!/(^|\s)\d+[\).]\s+/.test(text)) {
+    return [text];
   }
-  return cleaned
-    .split(/\. +/)
+  return text
+    .split(/(?:^|\s)(?:\d+[\).])\s+/)
     .map((step) => step.trim())
     .filter(Boolean);
+}
+
+function splitSentences(text: string): string[] {
+  return text
+    .replace(/([.!?])\s+/g, "$1|")
+    .split("|")
+    .map((step) => step.trim())
+    .filter(Boolean);
+}
+
+function splitLongStep(step: string): string[] {
+  if (step.length <= 160) {
+    return [step];
+  }
+
+  const connectorSplit = step
+    .replace(
+      /\b(then|next|after that|afterwards|meanwhile|once|when)\b/gi,
+      "|$1"
+    )
+    .split("|")
+    .map((piece) => piece.trim())
+    .filter(Boolean);
+  if (connectorSplit.length > 1) {
+    return connectorSplit;
+  }
+
+  const semicolonSplit = step
+    .split(/;\s+/)
+    .map((piece) => piece.trim())
+    .filter(Boolean);
+  if (semicolonSplit.length > 1) {
+    return semicolonSplit;
+  }
+
+  return [step];
+}
+
+function cleanStep(step: string): string {
+  return step
+    .replace(/^[\s•\-–—]+/, "")
+    .replace(/^\d+[\).]\s+/, "")
+    .trim();
+}
+
+function buildStepSections(steps: string[]) {
+  if (steps.length === 0) {
+    return [];
+  }
+
+  const sections: { key: StepSectionKey; steps: string[] }[] = [];
+  const categorize = (text: string): StepSectionKey => {
+    const lower = text.toLowerCase();
+    if (
+      /(prep|prepare|preheat|peel|chop|slice|cut|mix|combine|whisk|marinate|season)/.test(
+        lower
+      )
+    ) {
+      return "prepare";
+    }
+    if (
+      /(cook|bake|fry|grill|roast|simmer|boil|saute|steam|broil)/.test(lower)
+    ) {
+      return "cook";
+    }
+    if (/(serve|garnish|plate|enjoy)/.test(lower)) {
+      return "serve";
+    }
+    return "steps";
+  };
+
+  steps.forEach((step, index) => {
+    let title = categorize(step);
+    if (title === "steps" && index < 2) {
+      title = "prepare";
+    }
+    const current = sections[sections.length - 1];
+    if (!current || current.key !== title) {
+      sections.push({ key: title, steps: [step] });
+    } else {
+      current.steps.push(step);
+    }
+  });
+
+  return sections;
 }

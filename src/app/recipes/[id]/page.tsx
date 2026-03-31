@@ -4,7 +4,16 @@ import { getMealById } from "@/lib/recipes";
 import { normalizeLang, t } from "@/lib/i18n";
 import AdSlot from "@/components/AdSlot";
 
-const EMOJI_STEPS = ["🥄", "🔥", "🧂", "🍳", "🫧", "🍽️", "🌿", "✨"];
+const EMOJI_STEPS = [
+  "\u{1F944}",
+  "\u{1F525}",
+  "\u{1F9C2}",
+  "\u{1F373}",
+  "\u{1FAC7}",
+  "\u{1F37D}\u{FE0F}",
+  "\u{1F33F}",
+  "\u2728",
+];
 
 type RecipePageProps = {
   params: Promise<{ id: string }>;
@@ -31,7 +40,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
             <img
               src={recipe.image}
               alt={recipe.title}
-              className="mt-6 h-[320px] w-full rounded-3xl object-cover shadow-sm"
+              className="mt-6 h-[220px] w-full rounded-3xl object-cover shadow-sm sm:h-[320px]"
             />
           ) : null}
 
@@ -40,33 +49,56 @@ export default async function RecipePage({ params }: RecipePageProps) {
               <h2 className="text-lg font-semibold">{t(lang, "ingredients")}</h2>
               <ul className="mt-3 space-y-2 text-sm text-[color:var(--muted)]">
                 {recipe.ingredients.map((item) => (
-                  <li key={`${item.name}-${item.measure}`}>
+                  <li
+                    key={`${item.name}-${item.measure}`}
+                    className="flex items-center justify-between gap-4"
+                  >
                     <span className="font-semibold text-[color:var(--ink)]">
                       {item.name}
-                    </span>{" "}
-                    <span>{item.measure}</span>
+                    </span>
+                    {item.measure ? (
+                      <span className="shrink-0 rounded-full bg-[color:var(--surface-2)] px-3 py-1 text-xs font-semibold text-[color:var(--accent-3)]">
+                        {item.measure}
+                      </span>
+                    ) : null}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
               <h2 className="text-lg font-semibold">{t(lang, "steps")}</h2>
-              <ol className="mt-3 space-y-3 text-sm text-[color:var(--muted)]">
-                {recipe.steps.length === 0 ? (
-                  <li className="text-[color:var(--muted)]">
+              <div className="mt-3 space-y-5 text-sm text-[color:var(--muted)]">
+                {recipe.stepSections.length === 0 ? (
+                  <p className="text-[color:var(--muted)]">
                     No steps available for this recipe.
-                  </li>
+                  </p>
                 ) : (
-                  recipe.steps.map((step, index) => (
-                    <li key={`${step}-${index}`} className="flex gap-3">
-                      <span className="text-lg">
-                        {EMOJI_STEPS[index % EMOJI_STEPS.length]}
-                      </span>
-                      <span>{step}</span>
-                    </li>
+                  recipe.stepSections.map((section, sectionIndex) => (
+                    <div key={`${section.key}-${sectionIndex}`}>
+                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--muted)]">
+                        {t(lang, section.key)}
+                      </p>
+                      <ol className="mt-3 space-y-3">
+                        {section.steps.map((step, index) => (
+                          <li
+                            key={`${step}-${index}`}
+                            className="flex gap-3"
+                          >
+                            <span className="text-lg">
+                              {
+                                EMOJI_STEPS[
+                                  (sectionIndex + index) % EMOJI_STEPS.length
+                                ]
+                              }
+                            </span>
+                            <span>{step}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
                   ))
                 )}
-              </ol>
+              </div>
             </div>
           </div>
 
