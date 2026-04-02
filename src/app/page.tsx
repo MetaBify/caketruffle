@@ -52,7 +52,7 @@ export default async function Home() {
               Warm spices, mellow sauces, and a quiet finish.
             </p>
           </div>
-          <AdSlot label="Ad Slot - Hero" />
+          <AdSlot variant="box" />
         </div>
       </section>
 
@@ -74,7 +74,7 @@ export default async function Home() {
       </section>
 
       <section className="mt-12">
-        <AdSlot label="Ad Slot - Wide" />
+        <AdSlot variant="wide" />
       </section>
 
     </div>

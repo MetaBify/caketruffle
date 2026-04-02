@@ -173,20 +173,8 @@ export default async function RecipePage({ params }: RecipePageProps) {
         </section>
 
         <aside className="space-y-4">
-          <AdSlot
-            label="Ad Slot - Tall"
-            className="min-h-[280px]"
-            slot="3471267956"
-            format="fluid"
-            layoutKey="-fb+5w+4e-db+86"
-          />
-          <AdSlot
-            label="Ad Slot - Tall"
-            className="min-h-[280px]"
-            slot="3471267956"
-            format="fluid"
-            layoutKey="-fb+5w+4e-db+86"
-          />
+          <AdSlot variant="tall" className="min-h-[280px]" />
+          <AdSlot variant="tall" className="min-h-[280px]" />
         </aside>
 
       </div>

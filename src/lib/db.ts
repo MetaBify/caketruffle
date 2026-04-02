@@ -67,6 +67,11 @@ async function initSchema() {
     );
     CREATE INDEX IF NOT EXISTS idx_admin_sessions_token_hash
       ON admin_sessions(token_hash);
+
+    CREATE TABLE IF NOT EXISTS site_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
   `);
 }
 
@@ -77,7 +82,7 @@ if (!globalThis.__neonInit) {
 
 export async function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
-  params?: (string | number | boolean | null)[]
+  params?: (string | number | boolean | null | string[])[]
 ) : Promise<QueryResult<T>> {
   await initPromise;
   return pool.query<T>(text, params);

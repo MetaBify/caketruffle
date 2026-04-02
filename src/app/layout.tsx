@@ -4,8 +4,10 @@ import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import AdClickGate from "@/components/AdClickGate";
+import AdNetworkScripts from "@/components/AdNetworkScripts";
 import { cookies } from "next/headers";
 import { normalizeLang } from "@/lib/i18n";
+import { getAdSettings } from "@/lib/settings";
 
 const displayLatin = Fraunces({
   variable: "--font-display-latin",
@@ -68,26 +70,36 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const adSettings = await getAdSettings();
   const cookieStore = await cookies();
   const lang = normalizeLang(cookieStore.get("lang")?.value);
   return (
     <html
       lang={lang}
       data-lang={lang}
+      data-adsense={adSettings.adsenseEnabled ? "true" : "false"}
+      data-adsterra={adSettings.adsterraEnabled ? "true" : "false"}
       className={`${displayLatin.variable} ${bodyLatin.variable} ${displayCyrillic.variable} ${bodyCyrillic.variable} h-full antialiased`}
     >
       <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5356953527878151"
-          crossOrigin="anonymous"
-        />
+        {adSettings.adsenseEnabled ? (
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5356953527878151"
+            crossOrigin="anonymous"
+          />
+        ) : null}
       </head>
       <body className="min-h-full flex flex-col">
         <AdClickGate />
         <SiteHeader lang={lang} />
         <main className="flex-1">{children}</main>
         <SiteFooter lang={lang} />
+        <AdNetworkScripts
+          adsterraEnabled={adSettings.adsterraEnabled}
+          popunderEnabled={adSettings.adsterraPopunderEnabled}
+          socialbarEnabled={adSettings.adsterraSocialbarEnabled}
+        />
       </body>
     </html>
   );

@@ -24,6 +24,7 @@ import { normalizeLang, t } from "@/lib/i18n";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import ImageUploadPreview from "@/components/ImageUploadPreview";
 import FormSubmit from "@/components/FormSubmit";
+import { getAdSettings, setAdSettings } from "@/lib/settings";
 
 type AdminPageProps = {
   searchParams?: Promise<{ error?: string; success?: string }>;
@@ -125,6 +126,23 @@ async function deleteLinkAction(formData: FormData) {
   redirect("/admin?success=Link%20deleted");
 }
 
+async function updateAdSettingsAction(formData: FormData) {
+  "use server";
+  const nextSettings = {
+    adsenseEnabled: Boolean(formData.get("adsenseEnabled")),
+    adsterraEnabled: Boolean(formData.get("adsterraEnabled")),
+    adsterraPopunderEnabled: Boolean(
+      formData.get("adsterraPopunderEnabled")
+    ),
+    adsterraSocialbarEnabled: Boolean(
+      formData.get("adsterraSocialbarEnabled")
+    ),
+  };
+  await setAdSettings(nextSettings);
+  revalidatePath("/", "layout");
+  redirect("/admin?success=Ad%20settings%20updated");
+}
+
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   const cookieStore = await cookies();
   const lang = normalizeLang(cookieStore.get("lang")?.value);
@@ -166,6 +184,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   }
 
   const links = await listShortLinks();
+  const adSettings = await getAdSettings();
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -304,13 +323,53 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </div>
 
         <div className="space-y-4">
-          <AdSlot
-            label="Ad Slot - Admin"
-            className="min-h-[200px]"
-            slot="3471267956"
-            format="fluid"
-            layoutKey="-fb+5w+4e-db+86"
-          />
+          <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
+            <h2 className="text-lg font-semibold">Ad Settings</h2>
+            <p className="mt-1 text-xs text-[color:var(--muted)]">
+              Enable or disable ad providers and overlays.
+            </p>
+            <form action={updateAdSettingsAction} className="mt-4 space-y-3">
+              <label className="flex items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+                <span>Google AdSense</span>
+                <input
+                  type="checkbox"
+                  name="adsenseEnabled"
+                  defaultChecked={adSettings.adsenseEnabled}
+                />
+              </label>
+              <label className="flex items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+                <span>Adsterra banners</span>
+                <input
+                  type="checkbox"
+                  name="adsterraEnabled"
+                  defaultChecked={adSettings.adsterraEnabled}
+                />
+              </label>
+              <label className="flex items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+                <span>Adsterra Social Bar</span>
+                <input
+                  type="checkbox"
+                  name="adsterraSocialbarEnabled"
+                  defaultChecked={adSettings.adsterraSocialbarEnabled}
+                />
+              </label>
+              <label className="flex items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+                <span>Adsterra Popunder</span>
+                <input
+                  type="checkbox"
+                  name="adsterraPopunderEnabled"
+                  defaultChecked={adSettings.adsterraPopunderEnabled}
+                />
+              </label>
+              <button
+                type="submit"
+                className="w-full rounded-full bg-[color:var(--accent)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[color:var(--accent-3)]"
+              >
+                Save ad settings
+              </button>
+            </form>
+          </div>
+          <AdSlot variant="tall" className="min-h-[200px]" />
           <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
             <h2 className="text-lg font-semibold">{t(lang, "shortLinks")}</h2>
             <div className="mt-4 space-y-3 text-sm">

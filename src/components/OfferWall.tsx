@@ -90,9 +90,15 @@ export default function OfferWall({
   }, [secondsLeft]);
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-12">
-      <div className="flex flex-col gap-6">
-        <section className="w-full rounded-[32px] border border-white/70 bg-white/80 p-8 text-center shadow-[var(--shadow)]">
+    <div className="mx-auto w-full max-w-6xl px-6 py-12">
+      <div className="grid gap-6 lg:grid-cols-[1fr_minmax(0,640px)_1fr] lg:items-start">
+        <aside className="hidden flex-col gap-6 lg:flex">
+          <AdSlot variant="box" className="h-[250px]" />
+          <AdSlot variant="box" className="h-[250px]" />
+        </aside>
+
+        <div className="flex flex-col gap-6">
+          <section className="w-full rounded-[32px] border border-white/70 bg-white/80 p-8 text-center shadow-[var(--shadow)]">
           <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
             {t(lang, "linkAccess")}
           </p>
@@ -122,8 +128,8 @@ export default function OfferWall({
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <AdSlot label="Ad Slot - Wide" />
-            <AdSlot label="Ad Slot - Wide" />
+            <AdSlot variant="box" />
+            <AdSlot variant="box" />
           </div>
 
           <div className="mt-8">
@@ -171,9 +177,9 @@ export default function OfferWall({
               </p>
             ) : null}
           </div>
-        </section>
+          </section>
 
-        <aside className="w-full space-y-4">
+          <aside className="w-full space-y-4">
           <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
             <h2 className="text-lg font-semibold">
               {t(lang, "offersTitle")}
@@ -221,13 +227,14 @@ export default function OfferWall({
               )}
             </div>
           </div>
-          <AdSlot
-            label="Ad Slot - Tall"
-            className="min-h-[220px]"
-            slot="3471267956"
-            format="fluid"
-            layoutKey="-fb+5w+4e-db+86"
-          />
+          <AdSlot variant="box" className="hidden h-[250px] lg:block" />
+          <AdSlot variant="box" className="hidden h-[250px] lg:block" />
+          </aside>
+        </div>
+
+        <aside className="hidden flex-col gap-6 lg:flex">
+          <AdSlot variant="box" className="h-[250px]" />
+          <AdSlot variant="box" className="h-[250px]" />
         </aside>
       </div>
     </div>
