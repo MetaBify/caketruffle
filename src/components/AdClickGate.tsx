@@ -8,12 +8,7 @@ const MIN_INTERVAL = 7;
 const MAX_INTERVAL = 15;
 
 function shouldIgnoreClick(event: MouseEvent) {
-  if (event.defaultPrevented) return true;
-  if (event.button !== 0) return true;
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-    return true;
-  }
-  return false;
+  return event.button !== 0;
 }
 
 export default function AdClickGate() {
@@ -42,12 +37,6 @@ export default function AdClickGate() {
 
     const handler = (event: MouseEvent) => {
       if (shouldIgnoreClick(event)) return;
-      const target = event.target as HTMLElement | null;
-      if (!target) return;
-      const anchor = target.closest("a");
-      if (!anchor) return;
-      if (anchor.hasAttribute("data-no-adclick")) return;
-
       clickCount.current += 1;
       window.localStorage.setItem("adClickCount", String(clickCount.current));
 
@@ -63,9 +52,9 @@ export default function AdClickGate() {
       }
     };
 
-    document.addEventListener("click", handler);
+    document.addEventListener("click", handler, { capture: true });
     return () => {
-      document.removeEventListener("click", handler);
+      document.removeEventListener("click", handler, { capture: true });
     };
   }, []);
 
