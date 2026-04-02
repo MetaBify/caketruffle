@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const AD_REDIRECT_URL =
-  "https://www.profitablecpmratenetwork.com/r9rdnu3mu?key=64944c90ab6c4982b913889f63062228";
+  "https://overestimatecapricornspittle.com/r9rdnu3mu?key=64944c90ab6c4982b913889f63062228";
 const MIN_INTERVAL = 7;
 const MAX_INTERVAL = 15;
 
