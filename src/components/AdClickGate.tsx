@@ -27,6 +27,7 @@ export default function AdClickGate() {
 
     const handler = (event: MouseEvent) => {
       if (shouldIgnoreClick(event)) return;
+      if (document.body?.dataset.adclickDisabled === "true") return;
       const target = event.target as HTMLElement | null;
       if (!target) return;
       const anchor = target.closest("a");

@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import AdSlot from "@/components/AdSlot";
 import { type Lang, t } from "@/lib/i18n";
 
 type Offer = {
@@ -41,6 +40,13 @@ export default function OfferWall({
   const [actionError, setActionError] = useState<string | null>(null);
 
   const canContinue = secondsLeft <= 0 || leadComplete;
+
+  useEffect(() => {
+    document.body.dataset.adclickDisabled = "true";
+    return () => {
+      delete document.body.dataset.adclickDisabled;
+    };
+  }, []);
 
   useEffect(() => {
     fetch(`/api/links/start?code=${encodeURIComponent(code)}`).catch(
@@ -120,11 +126,6 @@ export default function OfferWall({
           <p className="mt-3 text-xs text-[color:var(--muted)]">
             {t(lang, "waitToContinue")} {t(lang, "orComplete")}
           </p>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <AdSlot label="Ad Slot - Wide" />
-            <AdSlot label="Ad Slot - Wide" />
-          </div>
 
           <div className="mt-8">
             <button
@@ -221,13 +222,6 @@ export default function OfferWall({
               )}
             </div>
           </div>
-          <AdSlot
-            label="Ad Slot - Tall"
-            className="min-h-[220px]"
-            slot="3471267956"
-            format="fluid"
-            layoutKey="-fb+5w+4e-db+86"
-          />
         </aside>
       </div>
     </div>
