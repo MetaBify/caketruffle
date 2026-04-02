@@ -3,7 +3,6 @@ import { Fraunces, Manrope, Noto_Sans, Noto_Serif } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import AdClickGate from "@/components/AdClickGate";
 import AdNetworkScripts from "@/components/AdNetworkScripts";
 import { cookies } from "next/headers";
 import { normalizeLang } from "@/lib/i18n";
@@ -91,7 +90,6 @@ export default async function RootLayout({
         ) : null}
       </head>
       <body className="min-h-full flex flex-col">
-        <AdClickGate />
         <SiteHeader lang={lang} />
         <main className="flex-1">{children}</main>
         <SiteFooter lang={lang} />
