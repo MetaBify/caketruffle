@@ -74,7 +74,7 @@ export default async function Home() {
       </section>
 
       <section className="mt-12">
-        <AdSlot variant="wide" />
+        <AdSlot variant="wide" useNative />
       </section>
 
     </div>

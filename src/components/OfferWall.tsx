@@ -98,6 +98,7 @@ export default function OfferWall({
         </aside>
 
         <div className="flex flex-col gap-6">
+          <AdSlot variant="wide" useNative className="w-full" />
           <section className="w-full rounded-[32px] border border-white/70 bg-white/80 p-8 text-center shadow-[var(--shadow)]">
           <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
             {t(lang, "linkAccess")}

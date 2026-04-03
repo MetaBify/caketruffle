@@ -7,6 +7,7 @@ type AdSlotVariant = "wide" | "tall" | "box" | "native";
 type AdSlotProps = {
   className?: string;
   variant?: AdSlotVariant;
+  useNative?: boolean;
 };
 
 const AD_CLIENT = "ca-pub-5356953527878151";
@@ -49,7 +50,11 @@ declare global {
   }
 }
 
-export default function AdSlot({ className, variant = "wide" }: AdSlotProps) {
+export default function AdSlot({
+  className,
+  variant = "wide",
+  useNative = false,
+}: AdSlotProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [provider, setProvider] = useState<"adsterra" | "adsense" | "none">(
     "adsterra"
@@ -88,10 +93,10 @@ export default function AdSlot({ className, variant = "wide" }: AdSlotProps) {
 
   const adsterraUnit = useMemo(() => {
     if (variant === "wide") {
-      if (isMobile || containerWidth < 480) {
+      if (isMobile || containerWidth < 520) {
         return ADSTERRA_UNITS.mobile;
       }
-      if (containerWidth >= 900) {
+      if (useNative) {
         return ADSTERRA_UNITS.native;
       }
       return ADSTERRA_UNITS.wide;
@@ -100,7 +105,7 @@ export default function AdSlot({ className, variant = "wide" }: AdSlotProps) {
     if (variant === "box") return ADSTERRA_UNITS.box;
     if (variant === "native") return ADSTERRA_UNITS.native;
     return ADSTERRA_UNITS.wide;
-  }, [variant, isMobile, containerWidth]);
+  }, [variant, isMobile, containerWidth, useNative]);
 
   useEffect(() => {
     if (provider !== "adsterra") return;
@@ -186,8 +191,8 @@ export default function AdSlot({ className, variant = "wide" }: AdSlotProps) {
       ? {
           minHeight: `${slotHeight}px`,
           height: `${slotHeight}px`,
-          width: `${slotWidth}px`,
-          maxWidth: "100%",
+          width: "100%",
+          maxWidth: `${slotWidth}px`,
           marginLeft: "auto",
           marginRight: "auto",
         }
@@ -198,9 +203,7 @@ export default function AdSlot({ className, variant = "wide" }: AdSlotProps) {
 
   return (
     <div
-      className={`flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-white/70 shadow-sm ${
-        className ?? ""
-      }`}
+      className={`flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-white/70 shadow-sm ${className ?? ""}`}
       ref={containerRef}
       style={slotStyle}
     >
