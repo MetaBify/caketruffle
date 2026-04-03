@@ -127,12 +127,74 @@ export default function OfferWall({
             {t(lang, "waitToContinue")} {t(lang, "orComplete")}
           </p>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <AdSlot variant="box" />
-            <AdSlot variant="box" />
+          <div className="mt-8 text-left">
+            <h2 className="text-base font-semibold">{t(lang, "offersTitle")}</h2>
+            <p className="mt-1 text-xs text-[color:var(--muted)]">
+              {t(lang, "offerDisclaimer")}
+            </p>
+            {error ? (
+              <p className="mt-4 text-sm text-[color:var(--accent-3)]">
+                {error}
+              </p>
+            ) : null}
+            <div className="mt-4 space-y-3">
+              {offers.length === 0 ? (
+                <p className="text-sm text-[color:var(--muted)]">
+                  {t(lang, "offersLoading")}
+                </p>
+              ) : (
+                offers.slice(0, 6).map((offer) => (
+                  <a
+                    key={offer.id}
+                    href={offer.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="flex items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 text-sm shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    {offer.network_icon ? (
+                      <img
+                        src={offer.network_icon}
+                        alt={offer.name}
+                        className="h-10 w-10 rounded-xl object-cover"
+                      />
+                    ) : (
+                      <div className="h-10 w-10 rounded-xl bg-[color:var(--surface-2)]" />
+                    )}
+                    <div className="flex-1">
+                      <p className="font-semibold">{offer.anchor}</p>
+                      <p className="text-xs text-[color:var(--muted)]">
+                        {offer.conversion}
+                      </p>
+                    </div>
+                    <span className="text-xs font-semibold text-[color:var(--accent-3)]" />
+                  </a>
+                ))
+              )}
+            </div>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-4">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[color:var(--surface-2)]">
+              <div
+                className="h-full rounded-full bg-[color:var(--accent)] transition-[width] duration-500"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    Math.max(
+                      0,
+                      ((waitSeconds - secondsLeft) / Math.max(1, waitSeconds)) *
+                        100
+                    )
+                  )}%`,
+                }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-[color:var(--muted)]">
+              This wait keeps links free and fast.
+            </p>
+          </div>
+
+          <div className="mt-4">
             <button
               type="button"
               disabled={!canContinue}
@@ -177,59 +239,12 @@ export default function OfferWall({
               </p>
             ) : null}
           </div>
-          </section>
 
-          <aside className="w-full space-y-4">
-          <div className="rounded-[32px] border border-white/70 bg-white/70 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold">
-              {t(lang, "offersTitle")}
-            </h2>
-            <p className="mt-1 text-xs text-[color:var(--muted)]">
-              {t(lang, "offerDisclaimer")}
-            </p>
-            {error ? (
-              <p className="mt-4 text-sm text-[color:var(--accent-3)]">
-                {error}
-              </p>
-            ) : null}
-            <div className="mt-4 space-y-3">
-              {offers.length === 0 ? (
-                <p className="text-sm text-[color:var(--muted)]">
-                  {t(lang, "offersLoading")}
-                </p>
-              ) : (
-                offers.map((offer) => (
-                  <a
-                    key={offer.id}
-                    href={offer.url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="flex items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 text-sm shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                  >
-                    {offer.network_icon ? (
-                      <img
-                        src={offer.network_icon}
-                        alt={offer.name}
-                        className="h-10 w-10 rounded-xl object-cover"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-xl bg-[color:var(--surface-2)]" />
-                    )}
-                    <div className="flex-1">
-                      <p className="font-semibold">{offer.anchor}</p>
-                      <p className="text-xs text-[color:var(--muted)]">
-                        {offer.conversion}
-                      </p>
-                    </div>
-                    <span className="text-xs font-semibold text-[color:var(--accent-3)]" />
-                  </a>
-                ))
-              )}
-            </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <AdSlot variant="box" />
+            <AdSlot variant="box" />
           </div>
-          <AdSlot variant="box" className="hidden h-[250px] lg:block" />
-          <AdSlot variant="box" className="hidden h-[250px] lg:block" />
-          </aside>
+          </section>
         </div>
 
         <aside className="hidden flex-col gap-6 lg:flex">
